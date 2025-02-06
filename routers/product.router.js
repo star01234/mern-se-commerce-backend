@@ -1,13 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/product.controller");
-const { upload } = require("../middlewares/file.middlewares");
+const { upload, uploadToFirebase } = require("../middlewares/file.middlewares");
 const authJwt = require("../middlewares/authJwt.middleware");
-//http://localhost:5000/api/v1/product
-router.post("", upload, productController.createProduct);
-router.get("", productController.getProducts);
-router.get("/:id",productController.getProductsById);
-router.delete("/:id",authJwt.verifyToken, productController.deleteProduct);
-router.put("/:id", authJwt.verifyToken, upload, productController.updateProduct);
-
+// http://localhost:5000/api/v1/product
+router.post("", upload, uploadToFirebase, productController.createProduct);
+// http://localhost:5000/api/v1/product
+router.get("", productController.getProduct);
+// http://localhost:5000/api/v1/product/
+router.get("/:id", productController.getProductByID);
+// http://localhost:5000/api/v1/product/
+router.delete("/:id", productController.deleteProduct);
+// http://localhost:5000/api/v1/product/676ba46f2cc93f45c000f3dd
+router.put("/:id", upload, uploadToFirebase, productController.updateProduct);
 module.exports = router;

@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const productSchema = new Schema({
-  name: { type: String, require: true },
-  description: { type: String, require: true },
-  price: { type: Number, require: true },
-  import: { type: String, require: true },
-  category: { type: Schema.Types.ObjectId, ref: "User" },
-});
+const ProductSchema = new Schema(
+  {
+    name: { type: String, require: true },
+    description: { type: String, require: true },
+    price: { type: Number, require: true },
+    image: { type: String, require: true },
+    category: { type: String },
+  },
+  { timestamps: true }
+); // เพิ่ม timestamps ที่นี่
 
-const productModel = model("product", productSchema);
-module.exports = productModel;
+const ProductModel = model("Product", ProductSchema);
+module.exports = ProductModel;
