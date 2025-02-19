@@ -117,6 +117,7 @@ exports.deleteProduct = async (req, res) => {
       });
       return;
     }
+    
     await productDoc.deleteOne();
     res.json(productDoc);
   } catch (error) {

@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 //สั่งให้ทำงาน
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/cart", cartRouter);
 
