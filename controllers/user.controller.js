@@ -42,3 +42,110 @@ exports.addUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
+exports.getAllUser = async (req, res) => {
+  try {
+    const user = await UserModel.find();
+    if (!user) {
+      return res.status(200).send({
+        message: "Can't get user",
+      });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Something error occurred while getting user",
+    });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { email, role } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required!" });
+  }
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { email, role },
+      { new: true }
+    );
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Something error occurred while updating user",
+    });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User was delete successfully" });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Something error occurred while deleting user",
+    });
+  }
+};
+
+exports.makeAdmin = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    user.role = "admin";
+    user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message ||
+        "Something error occurred while changing user role to admin",
+    });
+  }
+};
+
+exports.makeUser = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    user.role = "user";
+    user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message ||
+        "Something error occurred while changing admin role to user",
+    });
+  }
+};
+
+exports.getRoleByEmail = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    res.json({ role: user.role });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Something error occurred while user role",
+    });
+  }
+};
