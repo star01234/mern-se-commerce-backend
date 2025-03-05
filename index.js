@@ -21,6 +21,8 @@ try {
 }
 
 app.use(cors({ origin: BASE_URL, credentials: true }));
+// staripe 
+app.use("/api/v1/stripe/webhook",express.raw({ type: "application/json"}));
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to SE NPRU BLOG Restful API</h1>");
