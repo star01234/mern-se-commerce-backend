@@ -52,8 +52,9 @@ const CartModel = require("../models/Cart");
  *         description: Server error
  */
 exports.createCart = async (req, res) => {
-  const { name, price, image, quantity, email } = req.body;
-  if ( !name || !price || !image || !quantity || !email) {
+  console.log("Request Body:", req.body);
+  const { productId,name, price, image, quantity, email } = req.body;
+  if ( !productId || !name || !price || !image || !quantity || !email) {
     res.status(400).send({
       message: "Product information is missing!",
     });
@@ -62,6 +63,7 @@ exports.createCart = async (req, res) => {
   try {
     //Existing item in our cart =
     const ExistingItem = await CartModel.findOne({
+      productId,
       email,
     });
     if (ExistingItem) {
@@ -71,6 +73,7 @@ exports.createCart = async (req, res) => {
     }
     //add item to cart for the first time
     const cart = await CartModel.create({
+      productId,
       name,
       price,
       image,
@@ -80,6 +83,7 @@ exports.createCart = async (req, res) => {
     const data = await cart.save();
     res.send(data);
   } catch (error) {
+    console.error("Error adding to cart:", error);
     res.status(500).send({
       message:
         error.message ||
