@@ -10,7 +10,7 @@ const ProductSchema = new Schema(
     category: { type: String },
   },
   { timestamps: true }
-); // เพิ่ม timestamps ที่นี่
+); // เพิ่ม timestamps
 
 const ProductModel = model("Product", ProductSchema);
 module.exports = ProductModel;
