@@ -3,8 +3,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const OrderModel = require("../models/Order");
 const CartModel = require("../models/Cart");
 
-exports.createCheckOutSection = async (req, res) => {
-  console.log(req.body);
+exports.createCheckOutSession = async (req, res) => {
+  console.log(req.body);  
 
   const cartItems = req.body.cartItems;
   if (!cartItems) {
@@ -139,7 +139,7 @@ exports.webhook = async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     res.status(400).send({ message: `Webhook Error: ${err.message}` });
   }
@@ -151,6 +151,7 @@ exports.webhook = async (req, res) => {
       let data = event.data.object;
       stripe.customers.retrieve(data.customer).then(async (customer) => {
         try {
+          await createOrder(customer, data);
         } catch (error) {
           res.status(500).send({ message: `Webhook Error: ${err.message}` });
         }
