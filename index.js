@@ -19,7 +19,7 @@ try {
   console.log("DB Connection Failed");
 }
 
-app.use(cors({ origin: https://mern-se-commerce.vercel.app/, credentials: true }));
+app.use(cors({ origin: BASE_URL, credentials: true }));
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to SE NPRU BLOG Restful API</h1>");
